@@ -1,0 +1,7 @@
+# macOS metadata
+__MACOSX/
+._*
+.DS_Store
+
+# IDE
+.idea/
