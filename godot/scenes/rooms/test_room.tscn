@@ -1,42 +1,189 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=15 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/castle_floor_strip.png" id="2_floor"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/castle_platform_strip.png" id="3_plat"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_far.png" id="4_bgfar"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_mid.png" id="5_bgmid"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_near.png" id="6_bgnear"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/torch_frames.png" id="7_torch"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/skeleton.tscn" id="8_skel"]
 
+; Torch frame AtlasTextures (96×32 sheet, 3 frames of 32×32)
+[sub_resource type="AtlasTexture" id="AT_torch_0"]
+atlas = ExtResource("7_torch")
+region = Rect2(0, 0, 32, 32)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AT_torch_1"]
+atlas = ExtResource("7_torch")
+region = Rect2(32, 0, 32, 32)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AT_torch_2"]
+atlas = ExtResource("7_torch")
+region = Rect2(64, 0, 32, 32)
+filter_clip = true
+
+[sub_resource type="SpriteFrames" id="SF_torch"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_torch_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_torch_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_torch_2")
+}],
+"loop": true,
+"name": &"burn",
+"speed": 8.0
+}]
+
+; Physics shapes
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1920, 32)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
 size = Vector2(300, 32)
 
+; =============================================================
+; SCENE TREE
+; =============================================================
 [node name="TestRoom" type="Node2D"]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+; ── PARALLAX BACKGROUND ────────────────────────────────────
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
+[node name="LayerFar" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.1, 0.05)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="BGFar" type="Sprite2D" parent="ParallaxBackground/LayerFar"]
+position = Vector2(960, 540)
+texture = ExtResource("4_bgfar")
+centered = true
+
+[node name="LayerMid" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.25, 0.08)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="BGMid" type="Sprite2D" parent="ParallaxBackground/LayerMid"]
+position = Vector2(960, 540)
+texture = ExtResource("5_bgmid")
+centered = true
+
+[node name="LayerNear" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.5, 0.1)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="BGNear" type="Sprite2D" parent="ParallaxBackground/LayerNear"]
+position = Vector2(960, 540)
+texture = ExtResource("6_bgnear")
+centered = true
+
+; ── TORCHES (staggered frame so they flicker out of sync) ──
+[node name="Torches" type="Node2D" parent="."]
+
+[node name="Torch1" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(190, 436)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 0
+
+[node name="Torch2" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(450, 436)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 1
+
+[node name="Torch3" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(590, 336)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 2
+
+[node name="Torch4" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(850, 336)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 0
+
+[node name="Torch5" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(1070, 236)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 1
+
+[node name="Torch6" type="AnimatedSprite2D" parent="Torches"]
+position = Vector2(1330, 236)
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_torch")
+autoplay = "burn"
+frame = 2
+
+; ── FLOOR ──────────────────────────────────────────────────
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(960, 620)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 shape = SubResource("RectangleShape2D_floor")
 
+[node name="FloorVisual" type="Sprite2D" parent="Floor"]
+position = Vector2(0, 8)
+texture = ExtResource("2_floor")
+centered = true
+
+; ── PLATFORMS ──────────────────────────────────────────────
 [node name="Platform1" type="StaticBody2D" parent="."]
 position = Vector2(320, 460)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
-shape = SubResource("RectangleShape2D_platform")
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="PlatformVisual" type="Sprite2D" parent="Platform1"]
+position = Vector2(0, 8)
+texture = ExtResource("3_plat")
+centered = true
 
 [node name="Platform2" type="StaticBody2D" parent="."]
 position = Vector2(720, 360)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
-shape = SubResource("RectangleShape2D_platform")
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="PlatformVisual" type="Sprite2D" parent="Platform2"]
+position = Vector2(0, 8)
+texture = ExtResource("3_plat")
+centered = true
 
 [node name="Platform3" type="StaticBody2D" parent="."]
 position = Vector2(1200, 260)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
-shape = SubResource("RectangleShape2D_platform")
+shape = SubResource("RectangleShape2D_plat")
 
-[node name="Player" parent="." instance=ExtResource("1")]
+[node name="PlatformVisual" type="Sprite2D" parent="Platform3"]
+position = Vector2(0, 8)
+texture = ExtResource("3_plat")
+centered = true
+
+; ── ENEMY ──────────────────────────────────────────────────
+; Skeleton patrols Platform2.
+; Platform2 top = 360 - 16 = 344. Skeleton capsule height=28 → half=14.
+; So skeleton_y = 344 - 14 = 330.
+[node name="Skeleton1" parent="." instance=ExtResource("8_skel")]
+position = Vector2(700, 330)
+
+; ── PLAYER ─────────────────────────────────────────────────
+[node name="Player" parent="." instance=ExtResource("1_player")]
 position = Vector2(200, 540)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
