@@ -20,6 +20,7 @@ var jump_released_early: bool = false
 # --- Cached nodes ---
 @onready var state_machine: Node             = $StateMachine  ## Node type for headless compat; cast to StateMachine in editor
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var visual: ColorRect               = $Visual  ## Placeholder visual — tinted per state
 
 # --- Physics ---
 var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -53,3 +54,8 @@ func play_anim(anim_name: String) -> void:
 		return
 	if animated_sprite.animation != anim_name:
 		animated_sprite.play(anim_name)
+
+func set_state_color(color: Color) -> void:
+	## Tints the placeholder visual rect. Replace once real sprites are in.
+	if visual:
+		visual.color = color

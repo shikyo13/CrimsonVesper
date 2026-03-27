@@ -16,6 +16,7 @@ var _knockback_dir: float = 1.0
 func enter() -> void:
 	_timer = DURATION
 	player.play_anim("hurt")
+	player.set_state_color(Color(1.0, 0.5, 0.0, 1))  # orange
 
 func set_knockback(source_x: float) -> void:
 	## source_x: world-space X of the hit source.

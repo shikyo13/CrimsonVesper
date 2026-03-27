@@ -45,3 +45,10 @@ script = ExtResource("8")
 
 [node name="HurtState" type="Node" parent="StateMachine"]
 script = ExtResource("9")
+
+[node name="Visual" type="ColorRect" parent="."]
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = 24.0
+color = Color(0.2, 0.4, 0.9, 1)

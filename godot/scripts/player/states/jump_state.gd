@@ -8,6 +8,7 @@ func enter() -> void:
 	player.jump_released_early = false
 	player.coyote_timer = 0  # Consume coyote so it can't fire again mid-air.
 	player.play_anim("jump")
+	player.set_state_color(Color(0.0, 0.85, 0.85, 1))  # cyan
 
 func update(delta: float) -> void:
 	# Variable jump height: cut upward velocity once on early release.

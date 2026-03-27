@@ -10,10 +10,25 @@ size = Vector2(300, 32)
 
 [node name="TestRoom" type="Node2D"]
 
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BG" type="ColorRect" parent="Background"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.07, 0.05, 0.1, 1)
+
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(960, 620)
+
+[node name="Visual" type="ColorRect" parent="Floor"]
+offset_left = -960.0
+offset_top = -16.0
+offset_right = 960.0
+offset_bottom = 16.0
+color = Color(0.22, 0.2, 0.3, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 shape = SubResource("RectangleShape2D_floor")
@@ -21,17 +36,38 @@ shape = SubResource("RectangleShape2D_floor")
 [node name="Platform1" type="StaticBody2D" parent="."]
 position = Vector2(320, 460)
 
+[node name="Visual" type="ColorRect" parent="Platform1"]
+offset_left = -150.0
+offset_top = -16.0
+offset_right = 150.0
+offset_bottom = 16.0
+color = Color(0.35, 0.28, 0.45, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform2" type="StaticBody2D" parent="."]
 position = Vector2(720, 360)
 
+[node name="Visual" type="ColorRect" parent="Platform2"]
+offset_left = -150.0
+offset_top = -16.0
+offset_right = 150.0
+offset_bottom = 16.0
+color = Color(0.35, 0.28, 0.45, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform3" type="StaticBody2D" parent="."]
 position = Vector2(1200, 260)
+
+[node name="Visual" type="ColorRect" parent="Platform3"]
+offset_left = -150.0
+offset_top = -16.0
+offset_right = 150.0
+offset_bottom = 16.0
+color = Color(0.35, 0.28, 0.45, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
 shape = SubResource("RectangleShape2D_platform")
