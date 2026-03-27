@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/save_point.gd" id="1_sp"]
+
+[sub_resource type="CircleShape2D" id="CS_save"]
+radius = 40.0
+
+[node name="SavePoint" type="Area2D"]
+script = ExtResource("1_sp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.3, 0.9, 1.0, 1.0)
+scale = Vector2(3.0, 3.0)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.2, 0.8, 1.0, 1.0)
+energy = 0.8
+texture_scale = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CS_save")

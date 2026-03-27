@@ -25,6 +25,7 @@ AbilityManager="*res://scripts/systems/ability_manager.gd"
 InventoryManager="*res://scripts/systems/inventory_manager.gd"
 StatsManager="*res://scripts/systems/stats_manager.gd"
 InputHelper="*res://scripts/systems/input_helper.gd"
+RoomManager="*res://scripts/systems/room_manager.gd"
 
 [display]
 
