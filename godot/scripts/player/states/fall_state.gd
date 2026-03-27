@@ -1,5 +1,5 @@
 class_name FallState
-extends State
+extends "res://scripts/player/state.gd"
 ## Player is descending (walked off edge or reached jump apex).
 ## Coyote jump available for COYOTE_FRAMES after leaving the ground.
 

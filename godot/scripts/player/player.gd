@@ -18,7 +18,7 @@ var coyote_timer: int      = 0
 var jump_released_early: bool = false
 
 # --- Cached nodes ---
-@onready var state_machine: StateMachine     = $StateMachine
+@onready var state_machine: Node             = $StateMachine  ## Node type for headless compat; cast to StateMachine in editor
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # --- Physics ---

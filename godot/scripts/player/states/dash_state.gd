@@ -1,5 +1,5 @@
 class_name DashState
-extends State
+extends "res://scripts/player/state.gd"
 ## Fixed-duration horizontal burst, gravity suspended.
 ## Replace with a proper dodge-roll animation once art is ready.
 ## To gate on ability unlock: guard in handle_input callers with

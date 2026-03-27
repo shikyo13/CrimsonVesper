@@ -1,5 +1,5 @@
 class_name JumpState
-extends State
+extends "res://scripts/player/state.gd"
 ## Player is ascending after a jump.
 ## Supports variable jump height: release jump early → lower apex.
 

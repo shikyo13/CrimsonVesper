@@ -1,5 +1,5 @@
 class_name RunState
-extends State
+extends "res://scripts/player/state.gd"
 ## Player is running horizontally on the ground.
 
 func enter() -> void:

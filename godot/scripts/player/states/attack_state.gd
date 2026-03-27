@@ -1,5 +1,5 @@
 class_name AttackState
-extends State
+extends "res://scripts/player/state.gd"
 ## Fixed-duration attack placeholder.
 ## Wire up a hitbox Area2D and proper animation in the next pass.
 ## Duration is intentionally short — tune it to feel snappy in testing.

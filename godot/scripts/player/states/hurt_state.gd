@@ -1,5 +1,5 @@
 class_name HurtState
-extends State
+extends "res://scripts/player/state.gd"
 ## Knockback + brief stagger window.
 ##
 ## Usage from a hit-detection callback:

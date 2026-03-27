@@ -1,5 +1,5 @@
 class_name IdleState
-extends State
+extends "res://scripts/player/state.gd"
 ## Player is standing still on the ground.
 
 func enter() -> void:
