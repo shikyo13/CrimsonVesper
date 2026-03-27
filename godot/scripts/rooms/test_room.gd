@@ -1,6 +1,6 @@
 extends Node2D
 
-# Tile atlas coordinates in castle_tileset.png (4 columns × 3 rows of 32×32 tiles)
+# Tile atlas coordinates in cemetery_tileset.png (28 columns × 10 rows of 16×16 tiles)
 const T_FLOOR       := Vector2i(0, 0)   # stone_floor
 const T_WALL        := Vector2i(1, 0)   # stone_wall
 const T_PLATFORM    := Vector2i(2, 0)   # stone platform ledge
