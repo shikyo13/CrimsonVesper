@@ -230,7 +230,7 @@ func _start_dash() -> void:
 func _launch_fireballs() -> void:
 	if not player_ref:
 		return
-	var dir := sign(player_ref.global_position.x - global_position.x)
+	var dir: float = sign(player_ref.global_position.x - global_position.x)
 	# Phase 1: single shot. Phase 2+: 3-shot vertical spread.
 	var y_offsets: Array = [-20.0] if phase == 1 else [-44.0, -22.0, 0.0]
 	for y_off in y_offsets:

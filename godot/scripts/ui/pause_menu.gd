@@ -115,13 +115,8 @@ func _on_stats() -> void:
 
 
 func _on_save() -> void:
-	if has_node("/root/SaveManager") and has_node("/root/StatsManager"):
-		var data: Dictionary = {
-			"stats": StatsManager.get_save_data(),
-		}
-		if has_node("/root/InventoryManager"):
-			data["inventory"] = InventoryManager.get_save_data()
-		SaveManager.save_game(0, data)
+	if has_node("/root/SaveManager"):
+		SaveManager.save_game(0)
 		# Brief visual feedback on the save button
 		save_btn.text = "Saved!"
 		await get_tree().create_timer(1.0).timeout

@@ -10,7 +10,6 @@ const DEATH_BURST_SCENE = preload("res://scenes/vfx/death_burst.tscn")
 @export var move_speed:      float = 60.0
 @export var attack_range:    float = 55.0
 @export var alert_range:     float = 220.0
-@export var xp_reward:       int   = 10
 @export var potion_drop_chance: float = 0.2  ## 20% chance to drop health potion
 
 const GRAVITY:         float = 980.0

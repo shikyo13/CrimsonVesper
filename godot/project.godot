@@ -19,7 +19,6 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 [autoload]
 
 GameManager="*res://scripts/systems/game_manager.gd"
-StatsManager="*res://scripts/systems/stats_manager.gd"
 SaveManager="*res://scripts/systems/save_manager.gd"
 AudioManager="*res://scripts/systems/audio_manager.gd"
 AbilityManager="*res://scripts/systems/ability_manager.gd"

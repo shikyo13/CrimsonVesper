@@ -66,14 +66,10 @@ func _on_new_game() -> void:
 
 
 func _on_continue() -> void:
-	# Load from the first valid slot
+	# Load from the first valid slot (SaveManager applies data to all managers internally)
 	for slot: int in [0, 1, 2]:
 		if SaveManager.save_exists(slot):
-			var data: Dictionary = SaveManager.load_game(slot)
-			if has_node("/root/StatsManager") and data.has("stats"):
-				StatsManager.load_save_data(data["stats"])
-			if has_node("/root/InventoryManager") and data.has("inventory"):
-				InventoryManager.load_save_data(data["inventory"])
+			SaveManager.load_game(slot)
 			break
 	GameManager.go_to_scene(GAME_SCENE)
 
