@@ -152,6 +152,7 @@ func screen_shake(strength: float = 3.0, duration: float = 0.1) -> void:
 
 
 func _die() -> void:
+	AudioManager.play_sfx("player_death", global_position)
 	## Simple respawn — replace with death screen in a later pass.
 	global_position = Vector2(200, 540)
 	StatsManager.full_heal()

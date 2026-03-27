@@ -25,10 +25,13 @@ const TORCH_FRAMES := [Vector2i(2, 1), Vector2i(3, 1), Vector2i(0, 2)]
 var torch_timer: float = 0.0
 var torch_frame: int   = 0
 var torch_positions: Array[Vector2i] = []
+var torch_lights: Array[PointLight2D] = []
+var _flicker_timer: float = 0.0
 
 
 func _ready() -> void:
 	_build_room()
+	_place_torch_lights()
 	# Connect player HP / MP signals
 	var player := $Player
 	if player:
@@ -45,6 +48,8 @@ func _ready() -> void:
 		boss_name_lbl.visible = true
 		boss.hp_changed.connect(_on_boss_hp_changed)
 		boss.boss_defeated.connect(_on_boss_defeated)
+	# Start exploration music
+	AudioManager.play_music("exploration", 2.0)
 
 
 func _on_player_hp_changed(current: int, max_val: int) -> void:
@@ -133,7 +138,25 @@ func _place_torch(col: int, row: int) -> void:
 	torch_positions.append(Vector2i(col, row))
 
 
+func _place_torch_lights() -> void:
+	## Spawn a PointLight2D at each torch tile position.
+	## TileMapLayer scale is 4.0 and tile size is 16×16, so 64px per tile in world space.
+	const TILE_SIZE := 64
+	for tile_pos: Vector2i in torch_positions:
+		var light := PointLight2D.new()
+		light.color = Color(1.0, 0.549, 0.0, 1.0)  # warm orange #FF8C00
+		light.energy = 0.8
+		light.texture_scale = 2.5
+		light.position = Vector2(
+			tile_pos.x * TILE_SIZE + TILE_SIZE / 2,
+			tile_pos.y * TILE_SIZE
+		)
+		add_child(light)
+		torch_lights.append(light)
+
+
 func _process(delta: float) -> void:
+	# Torch sprite animation
 	torch_timer += delta
 	if torch_timer >= 0.15:
 		torch_timer = 0.0
@@ -141,3 +164,10 @@ func _process(delta: float) -> void:
 		var atlas: Vector2i = TORCH_FRAMES[torch_frame]
 		for pos: Vector2i in torch_positions:
 			tile_map.set_cell(pos, 0, atlas)
+
+	# Torch light flicker — random energy nudge every ~80 ms
+	_flicker_timer += delta
+	if _flicker_timer >= 0.08:
+		_flicker_timer = 0.0
+		for light: PointLight2D in torch_lights:
+			light.energy = randf_range(0.7, 0.9)

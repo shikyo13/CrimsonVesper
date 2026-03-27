@@ -151,6 +151,7 @@ func take_damage(amount: int, source_x: float) -> void:
 	if not _is_dead:
 		state = EnemyState.HURT
 		hurt_timer = HURT_DURATION
+		AudioManager.play_sfx("enemy_hit", global_position)
 
 
 ## Play death animation and queue_free on finish.
@@ -158,6 +159,7 @@ func _on_die() -> void:
 	state = EnemyState.DEAD
 	sprite.play("death")
 	set_physics_process(false)
+	AudioManager.play_sfx("enemy_death", global_position)
 	sprite.animation_finished.connect(_on_death_anim_done, CONNECT_ONE_SHOT)
 
 
@@ -185,8 +187,4 @@ func _grant_rewards() -> void:
 		GameManager.add_xp(xp_reward)
 	# 20% chance to restore 1 HP to the player (health potion stand-in)
 	if randf() < potion_drop_chance:
-		var players := get_tree().get_nodes_in_group("player")
-		if players.size() > 0:
-			var p := players[0]
-			p.current_hp = min(p.current_hp + 1, p.max_hp)
-			p.hp_changed.emit(p.current_hp, p.max_hp)
+		StatsManager.heal(1)
