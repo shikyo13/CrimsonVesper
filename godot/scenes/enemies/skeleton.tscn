@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/skeleton.gd" id="1_skel"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/skeleton_spritesheet.png" id="2_skel"]
@@ -114,6 +114,9 @@ animations = [{
 radius = 10.0
 height = 28.0
 
+[sub_resource type="RectangleShape2D" id="RS_skel_atk"]
+size = Vector2(28, 24)
+
 [node name="Skeleton" type="CharacterBody2D"]
 script = ExtResource("1_skel")
 
@@ -124,3 +127,11 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0)
 shape = SubResource("CS_skel")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(20, 0)
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("RS_skel_atk")

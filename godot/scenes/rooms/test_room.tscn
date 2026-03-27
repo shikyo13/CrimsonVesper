@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/rooms/test_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -12,7 +12,10 @@
 size = Vector2(1920, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
-size = Vector2(300, 32)
+size = Vector2(320, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform4"]
+size = Vector2(320, 32)
 
 [node name="TestRoom" type="Node2D"]
 script = ExtResource("1_room")
@@ -56,25 +59,40 @@ position = Vector2(960, 620)
 shape = SubResource("RectangleShape2D_floor")
 
 [node name="Platform1" type="StaticBody2D" parent="."]
-position = Vector2(320, 460)
+position = Vector2(320, 496)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform2" type="StaticBody2D" parent="."]
-position = Vector2(720, 360)
+position = Vector2(736, 400)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform3" type="StaticBody2D" parent="."]
-position = Vector2(1200, 260)
+position = Vector2(1216, 304)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
 shape = SubResource("RectangleShape2D_platform")
 
+[node name="Platform4" type="StaticBody2D" parent="."]
+position = Vector2(1568, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4"]
+shape = SubResource("RectangleShape2D_platform4")
+
 [node name="Skeleton" parent="." instance=ExtResource("3_skel")]
 position = Vector2(500, 580)
+
+[node name="Skeleton2" parent="." instance=ExtResource("3_skel")]
+position = Vector2(850, 580)
+
+[node name="Skeleton3" parent="." instance=ExtResource("3_skel")]
+position = Vector2(1300, 580)
+
+[node name="Skeleton4" parent="." instance=ExtResource("3_skel")]
+position = Vector2(1650, 580)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(200, 540)
@@ -82,3 +100,15 @@ position = Vector2(200, 540)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position_smoothing_enabled = true
 position_smoothing_speed = 5.0
+limit_left = 0
+limit_right = 1920
+limit_top = -64
+limit_bottom = 640
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="HPLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+text = "HP: 5 / 5"
+theme_override_font_sizes/font_size = 20

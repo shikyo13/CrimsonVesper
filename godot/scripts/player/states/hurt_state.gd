@@ -1,27 +1,31 @@
 class_name HurtState
 extends "res://scripts/player/state.gd"
-## Knockback + brief stagger window.
+## Knockback + brief stagger window + 1-second invincibility frames.
 ##
 ## Usage from a hit-detection callback:
 ##   player.state_machine.change_state("hurt")
 ##   (player.state_machine.current_state as HurtState).set_knockback(attacker.global_position.x)
 
-const DURATION:     float = 0.40
-const KNOCKBACK_X:  float = 220.0
-const KNOCKBACK_Y:  float = -180.0
+const DURATION:    float = 0.40
+const KNOCKBACK_X: float = 220.0
+const KNOCKBACK_Y: float = -180.0
+const IFRAMES:     float = 1.0
 
 var _timer: float        = 0.0
 var _knockback_dir: float = 1.0
 
+
 func enter() -> void:
 	_timer = DURATION
 	player.play_anim("hurt")
+	player.start_iframes(IFRAMES)
+
 
 func set_knockback(source_x: float) -> void:
-	## source_x: world-space X of the hit source.
-	## Player is knocked away from the source.
+	## source_x: world-space X of the hit source. Player is knocked away from it.
 	_knockback_dir = 1.0 if player.global_position.x >= source_x else -1.0
 	player.velocity = Vector2(_knockback_dir * KNOCKBACK_X, KNOCKBACK_Y)
+
 
 func update(delta: float) -> void:
 	_timer -= delta
