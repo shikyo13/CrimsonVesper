@@ -18,6 +18,7 @@ var _abilities: Dictionary = {
 	"grapple":      false,
 	"shadow_dash":  false,
 	"fire_barrier": false,
+	"fireball":     true,   ## Unlocked by default for playtest
 	"levitate":     false,
 	"bat_form":     false,
 }

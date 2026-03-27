@@ -10,9 +10,12 @@ extends CharacterBody2D
 @export var dash_duration: float = 0.18    ## Seconds the dash lasts
 @export var max_hp: int          = 5       ## Maximum hit points
 @export var attack_damage: int   = 2       ## Damage dealt per hit
+@export var max_mp: int          = 50      ## Maximum mana points
+@export var intelligence: int    = 5       ## INT stat — scales spell damage
 
 # --- Signals ---
 signal hp_changed(current_hp: int, max_hp: int)
+signal mp_changed(current_mp: int, max_mp: int)
 
 # --- Jump feel constants ---
 const JUMP_CUT_MULTIPLIER: float = 0.45
@@ -22,9 +25,11 @@ const COYOTE_FRAMES: int         = 6
 var coyote_timer: int            = 0
 var jump_released_early: bool    = false
 var current_hp: int
+var current_mp: int
 var invincible: bool             = false
 var iframes_timer: float         = 0.0
 var attack_cooldown_timer: float = 0.0
+var spell_cooldown_timer: float  = 0.0
 var facing_dir: float            = 1.0
 
 # --- Cached nodes ---
@@ -41,6 +46,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready() -> void:
 	add_to_group("player")
 	current_hp = max_hp
+	current_mp = max_mp
 	camera = get_node_or_null("Camera2D")
 	state_machine.change_state("idle")
 
@@ -53,9 +59,11 @@ func _physics_process(delta: float) -> void:
 		if iframes_timer <= 0.0:
 			invincible = false
 			animated_sprite.visible = true
-	# Attack cooldown
+	# Attack / spell cooldowns
 	if attack_cooldown_timer > 0.0:
 		attack_cooldown_timer -= delta
+	if spell_cooldown_timer > 0.0:
+		spell_cooldown_timer -= delta
 	# Camera lookahead
 	if camera:
 		var target_x := facing_dir * 40.0
@@ -105,6 +113,19 @@ func take_damage(amount: int, source_x: float) -> void:
 		hurt_state.set_knockback(source_x)
 
 
+func use_mp(amount: int) -> bool:
+	if current_mp < amount:
+		return false
+	current_mp -= amount
+	mp_changed.emit(current_mp, max_mp)
+	return true
+
+
+func restore_mp(amount: int) -> void:
+	current_mp = min(current_mp + amount, max_mp)
+	mp_changed.emit(current_mp, max_mp)
+
+
 func start_iframes(duration: float) -> void:
 	invincible = true
 	iframes_timer = duration
@@ -132,9 +153,12 @@ func _die() -> void:
 	## Simple respawn — replace with death screen in a later pass.
 	global_position = Vector2(200, 540)
 	current_hp = max_hp
+	current_mp = max_mp
 	hp_changed.emit(current_hp, max_hp)
+	mp_changed.emit(current_mp, max_mp)
 	invincible = false
 	iframes_timer = 0.0
+	spell_cooldown_timer = 0.0
 	velocity = Vector2.ZERO
 	Engine.time_scale = 1.0
 	state_machine.change_state("idle")

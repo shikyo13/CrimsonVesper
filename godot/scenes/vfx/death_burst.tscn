@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/vfx/death_burst.gd" id="1_burst"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death1.png" id="2_f1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death2.png" id="3_f2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death3.png" id="4_f3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death4.png" id="5_f4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death5.png" id="6_f5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/explosion/Enemy-Death6.png" id="7_f6"]
+
+[sub_resource type="SpriteFrames" id="SF_burst"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_f5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_f6")
+}],
+"loop": false,
+"name": &"burst",
+"speed": 12.0
+}]
+
+[node name="DeathBurst" type="AnimatedSprite2D"]
+scale = Vector2(3.0, 3.0)
+sprite_frames = SubResource("SF_burst")
+animation = &"burst"
+script = ExtResource("1_burst")

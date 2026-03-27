@@ -2,6 +2,8 @@ extends CharacterBody2D
 ## Skeleton enemy: patrols, alerts when player is nearby, swings a melee attack,
 ## takes 3 hits to kill, plays death animation, then frees itself.
 
+const DEATH_BURST_SCENE = preload("res://scenes/vfx/death_burst.tscn")
+
 # --- Config ---
 @export var patrol_distance: float = 150.0
 @export var move_speed:      float = 60.0
@@ -9,6 +11,8 @@ extends CharacterBody2D
 @export var attack_damage:   int   = 1
 @export var attack_range:    float = 55.0
 @export var alert_range:     float = 220.0
+@export var xp_reward:       int   = 10
+@export var potion_drop_chance: float = 0.2  ## 20% chance to drop health potion
 
 const GRAVITY:         float = 980.0
 const ATTACK_COOLDOWN: float = 1.2
@@ -159,4 +163,24 @@ func _flash_hurt() -> void:
 
 
 func _on_death_anim_done() -> void:
+	_spawn_death_burst()
+	_grant_rewards()
 	queue_free()
+
+
+func _spawn_death_burst() -> void:
+	var burst := DEATH_BURST_SCENE.instantiate()
+	burst.global_position = global_position
+	get_parent().add_child(burst)
+
+
+func _grant_rewards() -> void:
+	if GameManager.has_method("add_xp"):
+		GameManager.add_xp(xp_reward)
+	# 20% chance to restore 1 HP to the player (health potion stand-in)
+	if randf() < potion_drop_chance:
+		var players := get_tree().get_nodes_in_group("player")
+		if players.size() > 0:
+			var p := players[0]
+			p.current_hp = min(p.current_hp + 1, p.max_hp)
+			p.hp_changed.emit(p.current_hp, p.max_hp)

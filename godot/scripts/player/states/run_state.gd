@@ -32,3 +32,12 @@ func handle_input(event: InputEvent) -> void:
 		player.state_machine.change_state("dash")
 	elif event.is_action_pressed("attack") and player.attack_cooldown_timer <= 0.0:
 		player.state_machine.change_state("attack")
+	elif event.is_action_pressed("spell") and _can_cast():
+		player.use_mp(SpellState.MP_COST)
+		player.state_machine.change_state("spell")
+
+
+func _can_cast() -> bool:
+	return (player.spell_cooldown_timer <= 0.0
+		and player.current_mp >= SpellState.MP_COST
+		and AbilityManager.has_ability("fireball"))

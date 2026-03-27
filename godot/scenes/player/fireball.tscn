@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/fireball.gd" id="1_fb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/fireball/fireball1.png" id="2_f1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/fireball/fireball2.png" id="3_f2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/fireball/fireball3.png" id="4_f3"]
+
+[sub_resource type="SpriteFrames" id="SF_fireball"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CS_fb"]
+radius = 8.0
+
+[node name="Fireball" type="Area2D"]
+script = ExtResource("1_fb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2.0, 2.0)
+sprite_frames = SubResource("SF_fireball")
+animation = &"fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CS_fb")

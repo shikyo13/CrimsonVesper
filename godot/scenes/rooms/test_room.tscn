@@ -1,8 +1,11 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/rooms/test_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/skeleton.tscn" id="3_skel"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ghost.tscn" id="4_ghost"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/hell_gato.tscn" id="5_gato"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boss_warden.tscn" id="6_boss"]
 [ext_resource type="Resource" path="res://assets/tilesets/cemetery_tileset.tres" id="4_tileset"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/cemetery_bg_far.png" id="5_far"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/cemetery_bg_mid.png" id="6_mid"]
@@ -106,6 +109,15 @@ limit_right = 1920
 limit_top = -64
 limit_bottom = 640
 
+[node name="Ghost" parent="." instance=ExtResource("4_ghost")]
+position = Vector2(700, 350)
+
+[node name="HellGato" parent="." instance=ExtResource("5_gato")]
+position = Vector2(1100, 580)
+
+[node name="BossWarden" parent="." instance=ExtResource("6_boss")]
+position = Vector2(960, 540)
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="HPLabel" type="Label" parent="HUD"]
@@ -113,3 +125,25 @@ offset_left = 16.0
 offset_top = 16.0
 text = "HP: 5 / 5"
 theme_override_font_sizes/font_size = 20
+
+[node name="MPLabel" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 44.0
+text = "MP: 50 / 50"
+theme_override_font_sizes/font_size = 16
+
+[node name="BossHPBar" type="ProgressBar" parent="HUD"]
+visible = false
+offset_left = 560.0
+offset_top = 16.0
+offset_right = 1360.0
+offset_bottom = 44.0
+value = 100.0
+theme_override_font_sizes/font_size = 16
+
+[node name="BossNameLabel" type="Label" parent="HUD"]
+visible = false
+offset_left = 860.0
+offset_top = 48.0
+text = "The Crimson Warden"
+theme_override_font_sizes/font_size = 14
