@@ -16,8 +16,11 @@ const T_DOOR        := Vector2i(3, 2)
 
 const TORCH_FRAMES := [Vector2i(2, 1), Vector2i(3, 1), Vector2i(0, 2)]
 
-@onready var tile_map: TileMapLayer = $TileMapLayer
-@onready var hp_label: Label        = $HUD/HPLabel
+@onready var tile_map:      TileMapLayer = $TileMapLayer
+@onready var hp_label:      Label        = $HUD/HPLabel
+@onready var mp_label:      Label        = $HUD/MPLabel
+@onready var boss_hp_bar:   ProgressBar  = $HUD/BossHPBar
+@onready var boss_name_lbl: Label        = $HUD/BossNameLabel
 
 var torch_timer: float = 0.0
 var torch_frame: int   = 0
@@ -26,15 +29,40 @@ var torch_positions: Array[Vector2i] = []
 
 func _ready() -> void:
 	_build_room()
-	# Connect player HP signal
+	# Connect player HP / MP signals
 	var player := $Player
 	if player:
 		player.hp_changed.connect(_on_player_hp_changed)
+		player.mp_changed.connect(_on_player_mp_changed)
 	hp_label.text = "HP: %d / %d" % [StatsManager.hp, StatsManager.max_hp]
+	mp_label.text = "MP: %d / %d" % [StatsManager.mp, StatsManager.max_mp]
+	# Connect boss signals
+	var boss := get_node_or_null("BossWarden")
+	if boss:
+		boss_hp_bar.max_value = boss.max_hp
+		boss_hp_bar.value = boss.hp
+		boss_hp_bar.visible = true
+		boss_name_lbl.visible = true
+		boss.hp_changed.connect(_on_boss_hp_changed)
+		boss.boss_defeated.connect(_on_boss_defeated)
 
 
 func _on_player_hp_changed(current: int, max_val: int) -> void:
 	hp_label.text = "HP: %d / %d" % [current, max_val]
+
+
+func _on_player_mp_changed(current: int, max_val: int) -> void:
+	mp_label.text = "MP: %d / %d" % [current, max_val]
+
+
+func _on_boss_hp_changed(current: int, max_val: int) -> void:
+	boss_hp_bar.max_value = max_val
+	boss_hp_bar.value = current
+
+
+func _on_boss_defeated() -> void:
+	boss_hp_bar.visible = false
+	boss_name_lbl.visible = false
 
 
 func _build_room() -> void:

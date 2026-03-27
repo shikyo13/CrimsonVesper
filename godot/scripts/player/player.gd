@@ -10,10 +10,13 @@ extends CharacterBody2D
 @export var dash_speed: float    = 480.0   ## Horizontal speed during dash
 @export var dash_duration: float = 0.18    ## Seconds the dash lasts
 @export var attack_damage: int   = 2       ## Damage dealt per hit
+@export var max_mp: int          = 50      ## Maximum mana points
+@export var intelligence: int    = 5       ## INT stat — scales spell damage
 
 # --- Signals ---
 ## Forwarded from StatsManager.hp_changed for any UI connected to the player node.
 signal hp_changed(current_hp: int, max_hp: int)
+signal mp_changed(current_mp: int, max_mp: int)
 
 # --- Jump feel constants ---
 const JUMP_CUT_MULTIPLIER: float = 0.45
@@ -25,6 +28,7 @@ var jump_released_early: bool    = false
 var invincible: bool             = false
 var iframes_timer: float         = 0.0
 var attack_cooldown_timer: float = 0.0
+var spell_cooldown_timer: float  = 0.0
 var facing_dir: float            = 1.0
 
 # --- Cached nodes ---
@@ -40,14 +44,19 @@ var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
 	add_to_group("player")
-	# Forward StatsManager HP changes through the player's own signal for UI convenience
+	# Forward StatsManager HP/MP changes through the player's own signals for UI convenience
 	StatsManager.hp_changed.connect(_on_stats_hp_changed)
+	StatsManager.mp_changed.connect(_on_stats_mp_changed)
 	camera = get_node_or_null("Camera2D")
 	state_machine.change_state("idle")
 
 
 func _on_stats_hp_changed(new_hp: int, new_max_hp: int) -> void:
 	hp_changed.emit(new_hp, new_max_hp)
+
+
+func _on_stats_mp_changed(new_mp: int, new_max_mp: int) -> void:
+	mp_changed.emit(new_mp, new_max_mp)
 
 
 func _physics_process(delta: float) -> void:
@@ -58,9 +67,11 @@ func _physics_process(delta: float) -> void:
 		if iframes_timer <= 0.0:
 			invincible = false
 			animated_sprite.visible = true
-	# Attack cooldown
+	# Attack / spell cooldowns
 	if attack_cooldown_timer > 0.0:
 		attack_cooldown_timer -= delta
+	if spell_cooldown_timer > 0.0:
+		spell_cooldown_timer -= delta
 	# Camera lookahead
 	if camera:
 		var target_x := facing_dir * 40.0
@@ -109,6 +120,14 @@ func take_damage(amount: int, source_x: float) -> void:
 		hurt_state.set_knockback(source_x)
 
 
+func use_mp(amount: int) -> bool:
+	return StatsManager.use_mp(amount)
+
+
+func restore_mp(amount: int) -> void:
+	StatsManager.restore_mp(amount)
+
+
 func start_iframes(duration: float) -> void:
 	invincible = true
 	iframes_timer = duration
@@ -136,8 +155,10 @@ func _die() -> void:
 	## Simple respawn — replace with death screen in a later pass.
 	global_position = Vector2(200, 540)
 	StatsManager.full_heal()
+	StatsManager.restore_mp(StatsManager.max_mp)
 	invincible = false
 	iframes_timer = 0.0
+	spell_cooldown_timer = 0.0
 	velocity = Vector2.ZERO
 	Engine.time_scale = 1.0
 	state_machine.change_state("idle")

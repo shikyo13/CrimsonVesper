@@ -6,6 +6,8 @@ extends "res://scripts/player/state.gd"
 const DURATION: float = 0.30
 const COOLDOWN: float = 0.45
 
+const HIT_SPARK_SCENE = preload("res://scenes/vfx/hit_spark.tscn")
+
 var _timer: float = 0.0
 var _hit_targets: Array = []
 
@@ -44,9 +46,16 @@ func update(delta: float) -> void:
 		body.take_damage(player.attack_damage, player.global_position.x)
 		player.trigger_hitstop()
 		player.screen_shake()
+		_spawn_hit_spark(body.global_position)
 
 	if _timer <= 0.0:
 		if player.is_on_floor():
 			player.state_machine.change_state("idle")
 		else:
 			player.state_machine.change_state("fall")
+
+
+func _spawn_hit_spark(pos: Vector2) -> void:
+	var spark := HIT_SPARK_SCENE.instantiate()
+	spark.global_position = pos
+	player.get_parent().add_child(spark)

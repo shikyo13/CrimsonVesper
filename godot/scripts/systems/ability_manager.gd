@@ -18,7 +18,7 @@ var _abilities: Dictionary = {
 	"wall_climb":  false,
 	"grapple":     false,
 	"shadow_dash": false,
-	"fireball":    false,  # Spell — unlock via story/pickup
+	"fireball":    true,   # Unlocked by default for playtest
 	"fire_barrier": false,
 	"levitate":    false,
 	"bat_form":    false,

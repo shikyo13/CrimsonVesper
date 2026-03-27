@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3]
+[gd_scene load_steps=41 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player/state_machine.gd" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/player/states/dash_state.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/player/states/attack_state.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/player/states/hurt_state.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/player/states/spell_state.gd" id="10_spell"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/player_idle.png" id="10_idle"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/player_run.png" id="11_run"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/player_jump.png" id="12_jump"]
@@ -242,6 +243,9 @@ script = ExtResource("8")
 
 [node name="HurtState" type="Node" parent="StateMachine"]
 script = ExtResource("9")
+
+[node name="SpellState" type="Node" parent="StateMachine"]
+script = ExtResource("10_spell")
 
 [node name="AttackHitbox" type="Area2D" parent="."]
 position = Vector2(28, -4)
