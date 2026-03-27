@@ -17,14 +17,23 @@ const T_DOOR        := Vector2i(3, 2)
 const TORCH_FRAMES := [Vector2i(2, 1), Vector2i(3, 1), Vector2i(0, 2)]
 
 @onready var tile_map: TileMapLayer = $TileMapLayer
+@onready var hp_label: Label        = $HUD/HPLabel
 
 var torch_timer: float = 0.0
-var torch_frame: int = 0
+var torch_frame: int   = 0
 var torch_positions: Array[Vector2i] = []
 
 
 func _ready() -> void:
 	_build_room()
+	# Connect player HP signal
+	var player := $Player
+	player.hp_changed.connect(_on_player_hp_changed)
+	hp_label.text = "HP: %d / %d" % [player.current_hp, player.max_hp]
+
+
+func _on_player_hp_changed(current: int, max_val: int) -> void:
+	hp_label.text = "HP: %d / %d" % [current, max_val]
 
 
 func _build_room() -> void:
@@ -45,29 +54,34 @@ func _build_room() -> void:
 	for c in range(0, 60):
 		tile_map.set_cell(Vector2i(c, 19), 0, T_FLOOR)
 
-	# Platform 1 (~x 160–448 px → cols 5–14)
+	# Platform 1 (row 15, cols 5–14) — 128px above floor, just reachable with max jump
 	for c in range(5, 15):
-		tile_map.set_cell(Vector2i(c, 14), 0, T_PLATFORM)
+		tile_map.set_cell(Vector2i(c, 15), 0, T_PLATFORM)
 
-	# Platform 2 (~x 544–896 px → cols 17–28)
+	# Platform 2 (row 12, cols 17–28) — 96px above P1
 	for c in range(17, 29):
-		tile_map.set_cell(Vector2i(c, 11), 0, T_PLATFORM)
+		tile_map.set_cell(Vector2i(c, 12), 0, T_PLATFORM)
 
-	# Platform 3 (~x 1024–1376 px → cols 32–43)
+	# Platform 3 (row 9, cols 32–43) — 96px above P2
 	for c in range(32, 44):
-		tile_map.set_cell(Vector2i(c, 8), 0, T_PLATFORM)
+		tile_map.set_cell(Vector2i(c, 9), 0, T_PLATFORM)
 
-	# Pillars (top, mid×n, base)
-	_place_pillar(15, 15, 19)
-	_place_pillar(30, 12, 19)
-	_place_pillar(45, 9, 19)
+	# Platform 4 (row 12, cols 44–53) — descent path back down from P3
+	for c in range(44, 54):
+		tile_map.set_cell(Vector2i(c, 12), 0, T_PLATFORM)
+
+	# Pillars
+	_place_pillar(15, 16, 19)   # Right of P1
+	_place_pillar(29, 13, 19)   # Right of P2
+	_place_pillar(43, 10, 19)   # Right of P3
 
 	# Torches
-	_place_torch(14, 13)
-	_place_torch(29, 10)
-	_place_torch(44, 7)
-	_place_torch(2, 10)
-	_place_torch(57, 10)
+	_place_torch(14, 14)    # Left edge of P1
+	_place_torch(28, 11)    # Left edge of P2
+	_place_torch(42, 8)     # Left edge of P3
+	_place_torch(53, 11)    # Right edge of P4
+	_place_torch(2, 10)     # Left wall
+	_place_torch(57, 10)    # Right wall
 
 	# Spikes on a dangerous stretch of floor
 	for c in range(48, 55):

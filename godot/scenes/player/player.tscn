@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3]
+[gd_scene load_steps=35 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/player/state_machine.gd" id="2"]
@@ -188,6 +188,9 @@ animations = [{
 radius = 16.0
 height = 48.0
 
+[sub_resource type="RectangleShape2D" id="RS_attack_hitbox"]
+size = Vector2(32, 28)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1")
 
@@ -221,3 +224,11 @@ script = ExtResource("8")
 
 [node name="HurtState" type="Node" parent="StateMachine"]
 script = ExtResource("9")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(28, -4)
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("RS_attack_hitbox")
