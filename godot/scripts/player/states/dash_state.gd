@@ -14,6 +14,7 @@ func enter() -> void:
 	_dir = -1.0 if player.animated_sprite.flip_h else 1.0
 	player.velocity = Vector2(_dir * player.dash_speed, 0.0)
 	player.play_anim("dash")
+	player.set_state_color(Color(1.0, 0.9, 0.0, 1))  # yellow
 
 func update(delta: float) -> void:
 	_timer -= delta

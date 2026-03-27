@@ -12,6 +12,7 @@ func enter() -> void:
 	_timer = DURATION
 	player.velocity.x = 0.0
 	player.play_anim("attack")
+	player.set_state_color(Color(0.9, 0.1, 0.1, 1))  # red
 
 func update(delta: float) -> void:
 	_timer -= delta

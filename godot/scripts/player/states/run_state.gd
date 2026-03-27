@@ -4,6 +4,7 @@ extends "res://scripts/player/state.gd"
 
 func enter() -> void:
 	player.play_anim("run")
+	player.set_state_color(Color(0.2, 0.8, 0.3, 1))  # green
 
 func update(delta: float) -> void:
 	player.tick_coyote()
