@@ -7,7 +7,7 @@ extends Node
 ##   StatsManager.take_damage(3)
 ##   StatsManager.heal(10)
 
-signal stats_changed()
+signal stats_changed(stats: Dictionary)
 signal level_up(new_level: int)
 signal xp_gained(amount: int, total: int)
 signal hp_changed(current_hp: int, max_hp: int)
@@ -26,6 +26,7 @@ var luck: int = 5         ## lck
 var level: int = 1
 var xp: int = 0
 var xp_to_next: int = 150  # recalculated on level changes
+var stat_points: int = 0
 
 # --- Equipment bonuses (tracked separately so unequip is clean) ---
 var _bonus_max_hp: int = 0
@@ -37,6 +38,7 @@ var _bonus_luck: int = 0
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_recalc_xp_to_next()
 
 
@@ -58,11 +60,12 @@ func _do_level_up() -> void:
 	max_mp += 3
 	strength += 1
 	defense += 1
+	stat_points += 3
 	hp = max_hp
 	mp = max_mp
 	_recalc_xp_to_next()
 	level_up.emit(level)
-	stats_changed.emit()
+	stats_changed.emit(get_all_stats())
 	hp_changed.emit(hp, max_hp)
 	mp_changed.emit(mp, max_mp)
 
@@ -94,6 +97,11 @@ func full_heal() -> void:
 	hp_changed.emit(hp, max_hp)
 
 
+func set_hp(value: int) -> void:
+	hp = clampi(value, 0, max_hp)
+	hp_changed.emit(hp, max_hp)
+
+
 # --- MP ---
 
 func use_mp(amount: int) -> bool:
@@ -108,6 +116,11 @@ func restore_mp(amount: int) -> void:
 	if amount <= 0:
 		return
 	mp = min(max_mp, mp + amount)
+	mp_changed.emit(mp, max_mp)
+
+
+func set_mp(value: int) -> void:
+	mp = clampi(value, 0, max_mp)
 	mp_changed.emit(mp, max_mp)
 
 
@@ -128,7 +141,7 @@ func apply_bonus(bonus: Dictionary) -> void:
 		_bonus_intellect += bonus["intellect"]
 	if bonus.has("luck"):
 		_bonus_luck += bonus["luck"]
-	stats_changed.emit()
+	stats_changed.emit(get_all_stats())
 	hp_changed.emit(hp, max_hp)
 	mp_changed.emit(mp, max_mp)
 
@@ -151,7 +164,7 @@ func remove_bonus(bonus: Dictionary) -> void:
 		_bonus_intellect -= bonus["intellect"]
 	if bonus.has("luck"):
 		_bonus_luck -= bonus["luck"]
-	stats_changed.emit()
+	stats_changed.emit(get_all_stats())
 	hp_changed.emit(hp, max_hp)
 	mp_changed.emit(mp, max_mp)
 
@@ -174,6 +187,17 @@ func get_luck() -> int:
 	return luck + _bonus_luck
 
 
+func get_all_stats() -> Dictionary:
+	return {
+		"hp": hp, "max_hp": max_hp,
+		"mp": mp, "max_mp": max_mp,
+		"xp": xp, "xp_to_next": xp_to_next,
+		"level": level, "stat_points": stat_points,
+		"strength": get_strength(), "defense": get_defense(),
+		"intellect": get_intellect(), "luck": get_luck(),
+	}
+
+
 # --- Persistence ---
 
 func get_save_data() -> Dictionary:
@@ -182,7 +206,7 @@ func get_save_data() -> Dictionary:
 		"mp": mp, "max_mp": max_mp,
 		"strength": strength, "defense": defense,
 		"intellect": intellect, "luck": luck,
-		"level": level, "xp": xp,
+		"level": level, "xp": xp, "stat_points": stat_points,
 		"bonus_max_hp": _bonus_max_hp, "bonus_max_mp": _bonus_max_mp,
 		"bonus_strength": _bonus_strength, "bonus_defense": _bonus_defense,
 		"bonus_intellect": _bonus_intellect, "bonus_luck": _bonus_luck,
@@ -200,6 +224,7 @@ func load_save_data(data: Dictionary) -> void:
 	luck       = data.get("luck", 5)
 	level      = data.get("level", 1)
 	xp         = data.get("xp", 0)
+	stat_points = data.get("stat_points", 0)
 	_bonus_max_hp    = data.get("bonus_max_hp", 0)
 	_bonus_max_mp    = data.get("bonus_max_mp", 0)
 	_bonus_strength  = data.get("bonus_strength", 0)
@@ -207,6 +232,6 @@ func load_save_data(data: Dictionary) -> void:
 	_bonus_intellect = data.get("bonus_intellect", 0)
 	_bonus_luck      = data.get("bonus_luck", 0)
 	_recalc_xp_to_next()
-	stats_changed.emit()
+	stats_changed.emit(get_all_stats())
 	hp_changed.emit(hp, max_hp)
 	mp_changed.emit(mp, max_mp)
