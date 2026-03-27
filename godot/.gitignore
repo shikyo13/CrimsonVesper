@@ -1,0 +1,25 @@
+# Godot 4 generated cache — never commit these
+.godot/
+
+# Godot 3 legacy (safe to ignore)
+.import/
+export.cfg
+export_preset.cfg
+
+# Mono / C#
+.mono/
+data_*/
+mono_crash.*.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
