@@ -243,6 +243,12 @@ script = ExtResource("8")
 [node name="HurtState" type="Node" parent="StateMachine"]
 script = ExtResource("9")
 
+[node name="PlayerLight" type="PointLight2D" parent="."]
+position = Vector2(0, -16)
+color = Color(1.0, 0.894, 0.71, 1.0)
+energy = 0.6
+texture_scale = 2.0
+
 [node name="AttackHitbox" type="Area2D" parent="."]
 position = Vector2(28, -4)
 monitoring = false

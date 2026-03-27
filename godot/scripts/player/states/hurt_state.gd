@@ -19,6 +19,7 @@ func enter() -> void:
 	_timer = DURATION
 	player.play_anim("hurt")
 	player.start_iframes(IFRAMES)
+	AudioManager.play_sfx("player_hurt", player.global_position)
 
 
 func set_knockback(source_x: float) -> void:

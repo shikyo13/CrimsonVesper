@@ -15,6 +15,7 @@ func enter() -> void:
 	_hit_targets.clear()
 	player.velocity.x = 0.0
 	player.play_anim("attack")
+	AudioManager.play_sfx("sword_swing", player.global_position)
 	# Position hitbox in front of player based on current facing
 	var dir := -1.0 if player.animated_sprite.flip_h else 1.0
 	player.facing_dir = dir

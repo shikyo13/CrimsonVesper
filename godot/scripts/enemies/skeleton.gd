@@ -145,10 +145,12 @@ func take_damage(amount: int, source_x: float) -> void:
 		state = EnemyState.DEAD
 		sprite.play("death")
 		set_physics_process(false)
+		AudioManager.play_sfx("enemy_death", global_position)
 		sprite.animation_finished.connect(_on_death_anim_done, CONNECT_ONE_SHOT)
 	else:
 		state = EnemyState.HURT
 		hurt_timer = HURT_DURATION
+		AudioManager.play_sfx("enemy_hit", global_position)
 
 
 func _flash_hurt() -> void:

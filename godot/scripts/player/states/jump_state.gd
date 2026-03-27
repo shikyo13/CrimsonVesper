@@ -9,6 +9,7 @@ func enter() -> void:
 	player.jump_released_early = false
 	player.coyote_timer = 0  # Consume coyote so it can't fire again mid-air.
 	player.play_anim("jump")
+	AudioManager.play_sfx("jump", player.global_position)
 
 
 func update(delta: float) -> void:
