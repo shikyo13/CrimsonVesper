@@ -1,0 +1,10 @@
+{
+	"id": "amulet_of_vitality",
+	"name": "Amulet of Vitality",
+	"description": "A jade pendant pulsing with life force. The heart beats stronger while worn.",
+	"type": "accessory",
+	"icon_path": "",
+	"stats_bonus": { "max_hp": 10 },
+	"rarity": 1,
+	"value": 30
+}

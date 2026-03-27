@@ -1,0 +1,10 @@
+{
+	"id": "iron_sword",
+	"name": "Iron Sword",
+	"description": "A well-forged blade found deeper in the corridor. Heavier, sharper.",
+	"type": "weapon",
+	"icon_path": "",
+	"stats_bonus": { "strength": 7 },
+	"rarity": 1,
+	"value": 40
+}

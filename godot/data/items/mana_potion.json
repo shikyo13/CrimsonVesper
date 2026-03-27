@@ -1,0 +1,10 @@
+{
+	"id": "mana_potion",
+	"name": "Mana Potion",
+	"description": "A sapphire vial swirling with concentrated aetheric energy.",
+	"type": "consumable",
+	"icon_path": "",
+	"stats_bonus": { "restore_mp": 15 },
+	"rarity": 0,
+	"value": 10
+}

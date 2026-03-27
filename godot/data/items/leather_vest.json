@@ -1,0 +1,10 @@
+{
+	"id": "leather_vest",
+	"name": "Leather Vest",
+	"description": "Supple hide stitched together. Offers basic protection against claws and blades.",
+	"type": "armor",
+	"icon_path": "",
+	"stats_bonus": { "defense": 3 },
+	"rarity": 0,
+	"value": 15
+}

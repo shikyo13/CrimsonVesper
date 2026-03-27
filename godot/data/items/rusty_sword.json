@@ -1,0 +1,10 @@
+{
+	"id": "rusty_sword",
+	"name": "Rusty Sword",
+	"description": "A weathered blade dulled by time. Still draws blood.",
+	"type": "weapon",
+	"icon_path": "",
+	"stats_bonus": { "strength": 3 },
+	"rarity": 0,
+	"value": 5
+}

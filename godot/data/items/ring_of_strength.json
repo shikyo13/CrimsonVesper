@@ -1,0 +1,10 @@
+{
+	"id": "ring_of_strength",
+	"name": "Ring of Strength",
+	"description": "An iron band engraved with flexing figures. The wearer's grip grows firm.",
+	"type": "accessory",
+	"icon_path": "",
+	"stats_bonus": { "strength": 2 },
+	"rarity": 1,
+	"value": 25
+}

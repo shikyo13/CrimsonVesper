@@ -1,6 +1,7 @@
 class_name Player
 extends CharacterBody2D
 ## Root player node. Owns movement constants and shared physics helpers.
+## HP is authoritative in StatsManager; player.gd owns invincibility and hurt-state logic.
 ## All per-state logic lives in scripts/player/states/.
 
 # --- Tuning ---
@@ -8,10 +9,10 @@ extends CharacterBody2D
 @export var jump_force: float    = 520.0   ## Initial upward velocity on jump
 @export var dash_speed: float    = 480.0   ## Horizontal speed during dash
 @export var dash_duration: float = 0.18    ## Seconds the dash lasts
-@export var max_hp: int          = 5       ## Maximum hit points
 @export var attack_damage: int   = 2       ## Damage dealt per hit
 
 # --- Signals ---
+## Forwarded from StatsManager.hp_changed for any UI connected to the player node.
 signal hp_changed(current_hp: int, max_hp: int)
 
 # --- Jump feel constants ---
@@ -21,7 +22,6 @@ const COYOTE_FRAMES: int         = 6
 # --- Runtime state shared with states ---
 var coyote_timer: int            = 0
 var jump_released_early: bool    = false
-var current_hp: int
 var invincible: bool             = false
 var iframes_timer: float         = 0.0
 var attack_cooldown_timer: float = 0.0
@@ -40,9 +40,14 @@ var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
 	add_to_group("player")
-	current_hp = max_hp
+	# Forward StatsManager HP changes through the player's own signal for UI convenience
+	StatsManager.hp_changed.connect(_on_stats_hp_changed)
 	camera = get_node_or_null("Camera2D")
 	state_machine.change_state("idle")
+
+
+func _on_stats_hp_changed(new_hp: int, new_max_hp: int) -> void:
+	hp_changed.emit(new_hp, new_max_hp)
 
 
 func _physics_process(delta: float) -> void:
@@ -92,11 +97,10 @@ func play_anim(anim_name: String) -> void:
 # --- Combat ---
 
 func take_damage(amount: int, source_x: float) -> void:
-	if invincible or current_hp <= 0:
+	if invincible or StatsManager.hp <= 0:
 		return
-	current_hp = max(0, current_hp - amount)
-	hp_changed.emit(current_hp, max_hp)
-	if current_hp <= 0:
+	StatsManager.take_damage(amount)
+	if StatsManager.hp <= 0:
 		_die()
 		return
 	state_machine.change_state("hurt")
@@ -131,8 +135,7 @@ func screen_shake(strength: float = 3.0, duration: float = 0.1) -> void:
 func _die() -> void:
 	## Simple respawn — replace with death screen in a later pass.
 	global_position = Vector2(200, 540)
-	current_hp = max_hp
-	hp_changed.emit(current_hp, max_hp)
+	StatsManager.full_heal()
 	invincible = false
 	iframes_timer = 0.0
 	velocity = Vector2.ZERO

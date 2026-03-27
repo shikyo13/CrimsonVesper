@@ -28,8 +28,9 @@ func _ready() -> void:
 	_build_room()
 	# Connect player HP signal
 	var player := $Player
-	player.hp_changed.connect(_on_player_hp_changed)
-	hp_label.text = "HP: %d / %d" % [player.current_hp, player.max_hp]
+	if player:
+		player.hp_changed.connect(_on_player_hp_changed)
+	hp_label.text = "HP: %d / %d" % [StatsManager.hp, StatsManager.max_hp]
 
 
 func _on_player_hp_changed(current: int, max_val: int) -> void:

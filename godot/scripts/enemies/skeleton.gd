@@ -1,12 +1,11 @@
-extends CharacterBody2D
+extends "res://scripts/enemies/enemy_base.gd"
 ## Skeleton enemy: patrols, alerts when player is nearby, swings a melee attack,
-## takes 3 hits to kill, plays death animation, then frees itself.
+## plays death animation, then frees itself.
+## Inherits HP accounting and XP grant from EnemyBase.
 
-# --- Config ---
+# --- Config (overrides EnemyBase defaults via inspector) ---
 @export var patrol_distance: float = 150.0
 @export var move_speed:      float = 60.0
-@export var max_hp:          int   = 3
-@export var attack_damage:   int   = 1
 @export var attack_range:    float = 55.0
 @export var alert_range:     float = 220.0
 
@@ -15,11 +14,10 @@ const ATTACK_COOLDOWN: float = 1.2
 const HURT_DURATION:   float = 0.30
 const KNOCKBACK_X:     float = 180.0
 
-# Renamed from State to avoid conflict with player/state.gd class_name State
+## Renamed from State to avoid conflict with player/state.gd class_name State
 enum EnemyState { PATROL, ALERT, ATTACK, HURT, DEAD }
 
 var state: EnemyState = EnemyState.PATROL
-var hp: int
 var start_x: float
 var direction: float          = 1.0
 var attack_timer: float       = 0.0
@@ -32,8 +30,14 @@ var player_ref: Node2D        = null
 
 
 func _ready() -> void:
-	add_to_group("enemy")
-	hp = max_hp
+	super._ready()  # Sets current_hp = max_hp, add_to_group("enemy")
+	# EnemyBase default max_hp is 10; scene file stores 3 from original skeleton.tscn.
+	# Set here as fallback in case scene file doesn't override.
+	if max_hp == 10:  # Base default — apply skeleton-specific default
+		max_hp = 3
+		current_hp = max_hp
+	if damage == 1 and xp_reward == 5:  # Base defaults — apply skeleton defaults
+		xp_reward = 10
 	start_x = global_position.x
 	sprite.play("walk")
 	attack_hitbox.monitoring = false
@@ -64,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		sprite.flip_h = velocity.x < 0.0
 
 
-func _do_patrol(delta: float) -> void:
+func _do_patrol(_delta: float) -> void:
 	velocity.x = direction * move_speed
 	var dist := global_position.x - start_x
 	if dist > patrol_distance:
@@ -86,7 +90,6 @@ func _do_alert(delta: float) -> void:
 	if dist > alert_range * 1.5:
 		state = EnemyState.PATROL
 		return
-	# Chase player
 	direction = sign(player_ref.global_position.x - global_position.x)
 	velocity.x = direction * move_speed * 1.5
 	if sprite.animation != "walk":
@@ -97,19 +100,16 @@ func _do_alert(delta: float) -> void:
 
 func _do_attack(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, move_speed * delta * 8.0)
-	# Windup before hitbox activates
 	if attack_windup_timer > 0.0:
 		attack_windup_timer -= delta
 		if attack_windup_timer <= 0.0:
 			attack_hitbox.monitoring = true
-	# Poll for player during active hitbox
 	if attack_hitbox.monitoring:
 		for body: Node2D in attack_hitbox.get_overlapping_bodies():
 			if body.is_in_group("player"):
 				attack_hitbox.monitoring = false
-				body.take_damage(attack_damage, global_position.x)
+				body.take_damage(damage, global_position.x)
 				break
-	# End attack when animation finishes
 	if not sprite.is_playing() and sprite.animation == "attack":
 		attack_hitbox.monitoring = false
 		attack_timer = ATTACK_COOLDOWN
@@ -132,23 +132,29 @@ func _start_attack() -> void:
 	attack_hitbox.position.x = direction * 24.0
 
 
+# --- EnemyBase overrides ---
+
+## Handle skeleton-specific damage reaction (knockback, flash, state).
+## super.take_damage() is called to reduce HP and trigger die() if needed.
 func take_damage(amount: int, source_x: float) -> void:
 	if state == EnemyState.DEAD:
 		return
-	hp -= amount
 	attack_hitbox.monitoring = false
-	# Knockback away from hit source
 	var kdir := 1.0 if global_position.x >= source_x else -1.0
 	velocity = Vector2(kdir * KNOCKBACK_X, -80.0)
 	_flash_hurt()
-	if hp <= 0:
-		state = EnemyState.DEAD
-		sprite.play("death")
-		set_physics_process(false)
-		sprite.animation_finished.connect(_on_death_anim_done, CONNECT_ONE_SHOT)
-	else:
+	super.take_damage(amount, source_x)  # HP reduction + possible die()
+	if not _is_dead:
 		state = EnemyState.HURT
 		hurt_timer = HURT_DURATION
+
+
+## Play death animation and queue_free on finish.
+func _on_die() -> void:
+	state = EnemyState.DEAD
+	sprite.play("death")
+	set_physics_process(false)
+	sprite.animation_finished.connect(_on_death_anim_done, CONNECT_ONE_SHOT)
 
 
 func _flash_hurt() -> void:

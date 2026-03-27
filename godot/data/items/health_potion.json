@@ -1,0 +1,10 @@
+{
+	"id": "health_potion",
+	"name": "Health Potion",
+	"description": "A crimson vial that mends wounds on contact with the bloodstream.",
+	"type": "consumable",
+	"icon_path": "",
+	"stats_bonus": { "heal_hp": 20 },
+	"rarity": 0,
+	"value": 10
+}
