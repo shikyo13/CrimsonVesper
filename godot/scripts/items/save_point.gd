@@ -13,6 +13,16 @@ var _time:          float = 0.0
 
 
 func _ready() -> void:
+	# Godot 4: PointLight2D requires a texture; build one at runtime.
+	var grad := Gradient.new()
+	grad.colors = PackedColorArray([Color.WHITE, Color(1.0, 1.0, 1.0, 0.0)])
+	grad.offsets = PackedFloat32Array([0.0, 1.0])
+	var gt := GradientTexture2D.new()
+	gt.gradient = grad
+	gt.fill = GradientTexture2D.FILL_RADIAL
+	gt.width = 64
+	gt.height = 64
+	light.texture = gt
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
