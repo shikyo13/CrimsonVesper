@@ -48,8 +48,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _save() -> void:
-	var players := get_tree().get_nodes_in_group("player")
-	var hp := players[0].current_hp if players.size() > 0 else 0
+	var players = get_tree().get_nodes_in_group("player")
+	var hp: int = players[0].current_hp if players.size() > 0 else 0
 	var data := {
 		"room_id":   RoomManager.current_room_id,
 		"hp":        hp,
