@@ -21,7 +21,7 @@ func enter() -> void:
 	# Position hitbox in front of player based on current facing
 	var dir := -1.0 if player.animated_sprite.flip_h else 1.0
 	player.facing_dir = dir
-	player.attack_hitbox.position.x = dir * 28.0
+	player.attack_hitbox.position.x = dir * 48.0
 	player.attack_hitbox.scale.x = dir
 	player.attack_hitbox.monitoring = true
 
