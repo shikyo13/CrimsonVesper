@@ -18,7 +18,7 @@ var _abilities: Dictionary = {
 	"wall_climb":  false,
 	"grapple":     false,
 	"shadow_dash": false,
-	"fireball":    true,   # Unlocked by default for playtest
+	"fireball":    false,  # Unlocked via pickup in pre_boss room
 	"fire_barrier": false,
 	"levitate":    false,
 	"bat_form":    false,

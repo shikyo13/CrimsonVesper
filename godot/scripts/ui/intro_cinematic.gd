@@ -2,7 +2,7 @@ extends Control
 ## IntroCinematic — atmospheric story slides shown before the first room.
 ## Skip with Start/Escape; advance with ui_accept (A / Enter / Space).
 
-const GAME_SCENE: String = "res://scenes/rooms/test_room.tscn"
+const GAME_SCENE: String = "res://scenes/rooms/entry_hall.tscn"
 
 const FADE_IN_BG_TIME:   float = 1.2
 const FADE_IN_TEXT_TIME: float = 1.8

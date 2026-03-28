@@ -3,7 +3,7 @@ extends Control
 ## New Game → intro cinematic. Continue → game (if save exists). Options → overlay. Quit → exit.
 
 const INTRO_SCENE: String  = "res://scenes/ui/intro_cinematic.tscn"
-const GAME_SCENE:  String  = "res://scenes/rooms/test_room.tscn"
+const GAME_SCENE: String = "res://scenes/rooms/entry_hall.tscn"
 
 const SCROLL_SPEED: float  = 24.0   # pixels / second for the slowest parallax layer
 const TITLE_PULSE_SPEED: float = 1.2
