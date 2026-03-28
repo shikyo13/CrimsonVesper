@@ -48,15 +48,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _save() -> void:
-	var players = get_tree().get_nodes_in_group("player")
-	var hp: int = players[0].current_hp if players.size() > 0 else 0
-	var data := {
-		"room_id":   RoomManager.current_room_id,
-		"hp":        hp,
-		"abilities": AbilityManager.get_save_data(),
-		"inventory": InventoryManager.get_save_data(),
-	}
-	SaveManager.save_game(0, data)
+	SaveManager.save_game(0)
 	# Flash confirmation
 	var tween := create_tween()
 	tween.tween_property(light, "energy", 3.0, 0.1)
