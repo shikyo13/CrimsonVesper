@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 	if torch_timer >= 0.15:
 		torch_timer = 0.0
 		torch_frame = (torch_frame + 1) % 3
-		var atlas := TORCH_FRAMES[torch_frame]
+		var atlas: Vector2i = TORCH_FRAMES[torch_frame]
 		for pos: Vector2i in torch_positions:
 			tile_map.set_cell(pos, 0, atlas)
 
