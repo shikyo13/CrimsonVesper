@@ -24,7 +24,7 @@ func _ready() -> void:
 	_build_room()
 	var player := $Player
 	player.hp_changed.connect(_on_player_hp_changed)
-	hp_label.text = "HP: %d / %d" % [player.current_hp, player.max_hp]
+	hp_label.text = "HP: %d / %d" % [StatsManager.hp, StatsManager.max_hp]
 	_place_player(player)
 	door_left.body_entered.connect(_on_door_left)
 	door_right.body_entered.connect(_on_door_right)
