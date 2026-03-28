@@ -80,56 +80,58 @@ func _create_tileset() -> TileSet:
 
 
 # --- Room layout ---
-# Viewport 1920×1080, TileMapLayer scale 4.0 (64px/tile)
-# Visible cols 0–29, visible rows 0–16
-# Floor collision at y=620 → visual floor at row 10 (y=640)
+# Viewport 1920×1080, TileMapLayer scale 4.0 (64px/tile), Camera zoom 2.0
+# At 2x zoom the visible area is ~960×540 centered on the player.
+# Tile grid 30 cols × 12 rows.  Floor at row 9 (y=576 world).
 
 func _build_room() -> void:
-	# Background fill
-	for r in range(0, 11):
+	# Background fill — extend to 12 rows to cover below-floor area
+	for r in range(0, 12):
 		for c in range(0, 30):
 			tile_map.set_cell(Vector2i(c, r), 0, T_BG)
 
 	# Left wall
-	for r in range(0, 11):
+	for r in range(0, 12):
 		tile_map.set_cell(Vector2i(0, r), 0, T_WALL)
 
 	# Right wall
-	for r in range(0, 11):
+	for r in range(0, 12):
 		tile_map.set_cell(Vector2i(29, r), 0, T_WALL)
 
-	# Visual floor row
+	# Visual floor — 2 rows thick so it reads as solid ground
 	for c in range(0, 30):
+		tile_map.set_cell(Vector2i(c, 9), 0, T_FLOOR)
 		tile_map.set_cell(Vector2i(c, 10), 0, T_FLOOR)
+		tile_map.set_cell(Vector2i(c, 11), 0, T_FLOOR)
 
-	# Platform 1: row 7, cols 5–12 → 512px wide, y=448
+	# Platform 1: row 6, cols 5–12
 	for c in range(5, 13):
-		tile_map.set_cell(Vector2i(c, 7), 0, T_PLATFORM)
+		tile_map.set_cell(Vector2i(c, 6), 0, T_PLATFORM)
 
-	# Platform 2: row 5, cols 16–23 → 512px wide, y=320
+	# Platform 2: row 4, cols 16–23
 	for c in range(16, 24):
-		tile_map.set_cell(Vector2i(c, 5), 0, T_PLATFORM)
+		tile_map.set_cell(Vector2i(c, 4), 0, T_PLATFORM)
 
 	# Pillars flanking platforms
-	_place_pillar(13, 8, 10)   # Right of P1
-	_place_pillar(24, 6, 10)   # Right of P2
+	_place_pillar(13, 7, 9)   # Right of P1
+	_place_pillar(24, 5, 9)   # Right of P2
 
 	# Torches (tile + point light)
-	_place_torch(2, 9)    # Left wall
-	_place_torch(12, 6)   # Above P1
-	_place_torch(23, 4)   # Above P2
-	_place_torch(27, 9)   # Right wall
+	_place_torch(2, 8)    # Left wall
+	_place_torch(12, 5)   # Above P1
+	_place_torch(23, 3)   # Above P2
+	_place_torch(27, 8)   # Right wall
 
 	# Torch lights (warm orange-yellow, GradientTexture2D required by Godot 4)
 	var lt := _make_light_texture()
-	_add_light(Vector2(128, 576), Color(1.0, 0.65, 0.2), 2.5, lt)
-	_add_light(Vector2(832, 384), Color(1.0, 0.65, 0.2), 2.0, lt)
-	_add_light(Vector2(1536, 256), Color(1.0, 0.65, 0.2), 2.0, lt)
-	_add_light(Vector2(1792, 576), Color(1.0, 0.65, 0.2), 2.5, lt)
+	_add_light(Vector2(128, 512), Color(1.0, 0.65, 0.2), 2.5, lt)
+	_add_light(Vector2(832, 320), Color(1.0, 0.65, 0.2), 2.0, lt)
+	_add_light(Vector2(1536, 192), Color(1.0, 0.65, 0.2), 2.0, lt)
+	_add_light(Vector2(1792, 512), Color(1.0, 0.65, 0.2), 2.5, lt)
 
 	# Door frame on right side
+	tile_map.set_cell(Vector2i(28, 7), 0, T_DOOR)
 	tile_map.set_cell(Vector2i(28, 8), 0, T_DOOR)
-	tile_map.set_cell(Vector2i(28, 9), 0, T_DOOR)
 
 
 ## Create a shared radial gradient texture for all PointLight2D nodes.

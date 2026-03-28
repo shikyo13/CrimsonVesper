@@ -66,19 +66,19 @@ texture = ExtResource("8_near")
 scale = Vector2(4.0, 4.0)
 
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(960, 620)
+position = Vector2(960, 570)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 shape = SubResource("RS_floor")
 
 [node name="Platform1" type="StaticBody2D" parent="."]
-position = Vector2(576, 448)
+position = Vector2(576, 384)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
 shape = SubResource("RS_plat1")
 
 [node name="Platform2" type="StaticBody2D" parent="."]
-position = Vector2(1280, 320)
+position = Vector2(1280, 256)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
 shape = SubResource("RS_plat2")
@@ -96,10 +96,10 @@ position = Vector2(1912, 320)
 shape = SubResource("RS_wall_right")
 
 [node name="SpawnLeft" type="Marker2D" parent="."]
-position = Vector2(100, 580)
+position = Vector2(100, 530)
 
 [node name="SpawnRight" type="Marker2D" parent="."]
-position = Vector2(1820, 580)
+position = Vector2(1820, 530)
 
 [node name="DoorRight" type="Area2D" parent="."]
 position = Vector2(1904, 460)
@@ -108,30 +108,31 @@ position = Vector2(1904, 460)
 shape = SubResource("RS_door")
 
 [node name="SavePoint" parent="." instance=ExtResource("5_save")]
-position = Vector2(130, 580)
+position = Vector2(130, 530)
 
 [node name="HealthPotion" parent="." instance=ExtResource("4_pickup")]
-position = Vector2(576, 400)
+position = Vector2(576, 340)
 
 [node name="Skeleton" parent="." instance=ExtResource("3_skel")]
-position = Vector2(450, 580)
+position = Vector2(450, 530)
 
 [node name="Skeleton2" parent="." instance=ExtResource("3_skel")]
-position = Vector2(900, 580)
+position = Vector2(900, 530)
 
 [node name="Skeleton3" parent="." instance=ExtResource("3_skel")]
-position = Vector2(1450, 580)
+position = Vector2(1450, 530)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(100, 580)
+position = Vector2(100, 530)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(2.0, 2.0)
 position_smoothing_enabled = true
 position_smoothing_speed = 5.0
 limit_left = 0
 limit_right = 1920
-limit_top = -64
-limit_bottom = 640
+limit_top = 0
+limit_bottom = 700
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
