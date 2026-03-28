@@ -90,6 +90,23 @@ func delete_save(slot: int) -> void:
 		DirAccess.remove_absolute(_slot_path(slot))
 
 
+## Return the current_room from the first valid save slot, or "" if none exist.
+func get_last_save_room() -> String:
+	for slot in range(MAX_SLOTS):
+		if not has_save(slot):
+			continue
+		var file := FileAccess.open(_slot_path(slot), FileAccess.READ)
+		if file == null:
+			continue
+		var json := JSON.new()
+		if json.parse(file.get_as_text()) != OK:
+			continue
+		var data: Dictionary = json.data
+		if data.has("current_room") and str(data["current_room"]) != "":
+			return str(data["current_room"])
+	return ""
+
+
 # --- Helpers ---
 
 func _slot_path(slot: int) -> String:

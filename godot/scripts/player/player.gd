@@ -153,13 +153,8 @@ func screen_shake(strength: float = 3.0, duration: float = 0.1) -> void:
 
 func _die() -> void:
 	AudioManager.play_sfx("player_death", global_position)
-	## Simple respawn — replace with death screen in a later pass.
-	global_position = Vector2(200, 540)
-	StatsManager.full_heal()
-	StatsManager.restore_mp(StatsManager.max_mp)
-	invincible = false
-	iframes_timer = 0.0
-	spell_cooldown_timer = 0.0
-	velocity = Vector2.ZERO
 	Engine.time_scale = 1.0
-	state_machine.change_state("idle")
+	get_tree().paused = true
+	GameManager.change_state(GameManager.GameState.GAME_OVER)
+	var game_over := preload("res://scenes/ui/game_over_screen.tscn").instantiate()
+	get_tree().root.add_child(game_over)
