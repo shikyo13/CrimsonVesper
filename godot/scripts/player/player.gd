@@ -5,9 +5,9 @@ extends CharacterBody2D
 ## All per-state logic lives in scripts/player/states/.
 
 # --- Tuning ---
-@export var speed: float         = 200.0   ## Horizontal run speed (px/s)
-@export var jump_force: float    = 520.0   ## Initial upward velocity on jump
-@export var dash_speed: float    = 480.0   ## Horizontal speed during dash
+@export var speed: float         = 280.0   ## Horizontal run speed (px/s)
+@export var jump_force: float    = 620.0   ## Initial upward velocity on jump
+@export var dash_speed: float    = 560.0   ## Horizontal speed during dash
 @export var dash_duration: float = 0.18    ## Seconds the dash lasts
 @export var attack_damage: int   = 2       ## Damage dealt per hit
 @export var max_mp: int          = 50      ## Maximum mana points
