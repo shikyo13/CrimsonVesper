@@ -95,8 +95,8 @@ A complete vertical slice demo for Crimson Vesper, a 2D SOTN-inspired metroidvan
 
 - AbilityManager tracks unlocked abilities — already scaffolded
 - Demo ability progression:
-  - Start with: basic melee attack + jump
-  - Corridor: dash pickup (mid-room reward for exploration)
+  - Start with: basic melee attack + jump + dash
+  - Corridor: double-jump pickup (mid-room reward for exploration)
   - Pre-Boss: fireball/spell pickup (prepares player for boss fight)
 - Each new ability expands combat options for the boss
 
@@ -153,6 +153,8 @@ A complete vertical slice demo for Crimson Vesper, a 2D SOTN-inspired metroidvan
 
 ### 3.2 Room Content Design
 
+- Returning to a previous room respawns basic monsters like SOTN. If we have unique encounters, they do not replay/respawn. 
+
 **Entry Hall (Cemetery tileset):**
 - 3 skeletons teach combat spacing
 - First skeleton alone (safe to learn), next two paired (crowd management)
@@ -162,7 +164,7 @@ A complete vertical slice demo for Crimson Vesper, a 2D SOTN-inspired metroidvan
 **Corridor (Church tileset):**
 - Vertical platforming challenge with ghosts
 - Ghosts teach dealing with aerial enemies
-- Dash pickup halfway through — rewards exploration
+- Double-Jump halfway through — rewards exploration
 - Teaches: platforming, aerial combat, dash ability
 
 **Pre-Boss (Town tileset):**
